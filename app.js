@@ -1,3 +1,7 @@
+// Firebase SDKのインポート
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
+import { getFirestore, collection, addDoc, getDocs } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js';
+
 // Firebaseの設定
 const firebaseConfig = {
     apiKey: "AIzaSyAk0LNlawSWUm--9l_Wf9-4qVfxGiyq-Dw",
@@ -10,8 +14,8 @@ const firebaseConfig = {
 };
 
 // Firebaseを初期化
-const app = firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore(app);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 // ボスデータを格納する配列
 let bosses = [];
@@ -34,7 +38,7 @@ window.onload = () => {
 // ボスデータをFirestoreに追加する関数
 const addBossToFirestore = async (name, remainingTime) => {
     const spawnTime = calculateSpawnTime(remainingTime);
-    const docRef = await firebase.firestore().collection("bosses").add({
+    const docRef = await addDoc(collection(db, "bosses"), {
         name: name,
         remainingTime: remainingTime,
         spawnTime: spawnTime
@@ -74,7 +78,7 @@ const displayBosses = () => {
 
 // Firestoreからボスデータを取得する関数
 const fetchBosses = async () => {
-    const querySnapshot = await firebase.firestore().collection("bosses").get();
+    const querySnapshot = await getDocs(collection(db, "bosses"));
     bosses = [];
     querySnapshot.forEach((doc) => {
         bosses.push({ id: doc.id, ...doc.data() });
