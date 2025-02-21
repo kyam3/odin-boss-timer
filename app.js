@@ -1,13 +1,15 @@
 // Firebaseの設定
-const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
-};
+  const firebaseConfig = {
+    apiKey: "AIzaSyAk0LNlawSWUm--9l_Wf9-4qVfxGiyq-Dw",
+    authDomain: "odin-boss-timer.firebaseapp.com",
+    projectId: "odin-boss-timer",
+    storageBucket: "odin-boss-timer.firebasestorage.app",
+    messagingSenderId: "29849058878",
+    appId: "1:29849058878:web:06c4e1ff0f3988c11f1b6f",
+    measurementId: "G-NCLC5GRC2D"
+  };
 
+// Firebaseを初期化
 const app = firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore(app);
 
@@ -17,7 +19,7 @@ let bosses = [];
 // ボスデータをFirestoreに追加する関数
 const addBossToFirestore = async (name, remainingTime) => {
     const spawnTime = calculateSpawnTime(remainingTime);
-    const docRef = await addDoc(collection(db, "bosses"), {
+    const docRef = await firebase.firestore().collection("bosses").add({
         name: name,
         remainingTime: remainingTime,
         spawnTime: spawnTime
@@ -57,7 +59,7 @@ const displayBosses = () => {
 
 // Firestoreからボスデータを取得する関数
 const fetchBosses = async () => {
-    const querySnapshot = await getDocs(collection(db, "bosses"));
+    const querySnapshot = await firebase.firestore().collection("bosses").get();
     bosses = [];
     querySnapshot.forEach((doc) => {
         bosses.push({ id: doc.id, ...doc.data() });
