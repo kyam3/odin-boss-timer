@@ -1,0 +1,9 @@
+{
+  "name": "odin-boss-timer",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "cp index.html build/index.html"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
