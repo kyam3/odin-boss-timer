@@ -70,8 +70,13 @@ const displayBosses = () => {
             <td>${boss.name}</td>
             <td>${boss.remainingTime}</td>
             <td>${boss.spawnTime}</td>
-            <td><button class="delete-btn" onclick="deleteBoss('${boss.id}')">削除</button></td> <!-- 削除ボタン -->
+            <td><button class="delete-btn">削除</button></td> <!-- 削除ボタン -->
         `;
+        
+        // 削除ボタンにクリックイベントを追加
+        const deleteButton = row.querySelector('.delete-btn');
+        deleteButton.addEventListener('click', () => deleteBoss(boss.id));
+
         tableBody.appendChild(row);
     });
 };
