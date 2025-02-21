@@ -3,16 +3,8 @@ import { displayBosses, sortById, sortBySpawnTime } from './table.js';
 
 // ページ読み込み時にバージョン（更新日時）を表示
 window.onload = () => {
-    // ファイルの更新日時を取得
-    const fileUrl = 'index.html'; // 更新日時を取得したいファイル
-    fetch(fileUrl, { method: 'HEAD' })
-        .then(response => {
-            const lastModified = response.headers.get('Last-Modified');
-            document.getElementById('version').textContent = `Last updated: ${lastModified}`;
-        })
-        .catch(error => {
-            console.error('Error fetching last modified:', error);
-        });
+    const buildTimestamp = process.env.BUILD_TIMESTAMP || 'No timestamp found';
+    document.getElementById("version").textContent = `Last updated: ${buildTimestamp}`;
 };
 
 // バージョン表示用関数（日時を取得）
