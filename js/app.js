@@ -3,7 +3,7 @@ import { displayBosses, sortById, sortBySpawnTime } from './table.js';
 
 // ページ読み込み時にバージョン（更新日時）を表示
 window.onload = () => {
-    const buildTimestamp = process.env.BUILD_TIMESTAMP || 'No timestamp found';
+    const buildTimestamp = BUILD_TIMESTAMP || 'No timestamp found';
     document.getElementById("version").textContent = `Last updated: ${buildTimestamp}`;
 };
 
