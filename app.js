@@ -116,7 +116,7 @@ const sortBySpawnTime = () => {
 };
 
 // ボスを追加する関数
-export const addBoss = () => {
+const addBoss = () => {
     const bossName = document.getElementById('bossName').value;
     const remainingTime = document.getElementById('remainingTime').value;
     if (bossName && remainingTime) {
@@ -128,5 +128,7 @@ export const addBoss = () => {
     }
 };
 
-// ボタンイベントリスナーを設定
-document.getElementById('addBossBtn').addEventListener('click', addBoss);
+// **ここで addBoss をグローバル変数として登録**
+window.addBoss = addBoss;
+window.sortById = sortById;
+window.sortBySpawnTime = sortBySpawnTime;
