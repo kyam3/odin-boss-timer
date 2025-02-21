@@ -1,4 +1,4 @@
-import { addBossToFirestore, fetchBosses, deleteBoss } from './firestore.js';
+import { addBossToFirestore, fetchBosses, deleteBossFromFirestore } from './firestore.js'; // 修正: deleteBossからdeleteBossFromFirestoreへ
 import { displayBosses, sortById, sortBySpawnTime } from './table.js';
 
 // ページ読み込み時にバージョン（更新日時）を表示
