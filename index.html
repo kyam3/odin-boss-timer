@@ -128,10 +128,12 @@
 
     <!-- app.js も type="module" を追加 -->
     <script type="module" src="app.js"></script> <!-- JavaScriptファイルを正しく配置 -->
-    
+
     <script type="module">
         // app.js で定義されたaddBoss関数をボタンに紐づける
-        document.getElementById('addBossBtn').addEventListener('click', addBoss);
+        document.getElementById('addBossBtn').addEventListener('click', function() {
+            addBoss(); // こちらでaddBossを呼び出す
+        });
     </script>
 </body>
 <!-- フッターでバージョンを表示 -->
