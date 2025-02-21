@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ボス湧きタイマー</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        td button {
+            padding: 6px 12px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        td button:hover {
+            background-color: #e53935;
+        }
+        input[type="text"] {
+            padding: 8px;
+            width: 80px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        .add-boss {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .add-boss input, .add-boss button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        .add-boss button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        .add-boss button:hover {
+            background-color: #45a049;
+        }
+        @media (max-width: 768px) {
+            table {
+                font-size: 14px;
+            }
+            input[type="text"] {
+                width: 60px;
+            }
+        }
+    </style>
+    <script type="module">
+        // Firebase SDKを正しいURLからインポート
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyAk0LNlawSWUm--9l_Wf9-4qVfxGiyq-Dw",
+    authDomain: "odin-boss-timer.firebaseapp.com",
+    projectId: "odin-boss-timer",
+    storageBucket: "odin-boss-timer.firebasestorage.app",
+    messagingSenderId: "29849058878",
+    appId: "1:29849058878:web:06c4e1ff0f3988c11f1b6f",
+    measurementId: "G-NCLC5GRC2D"
+  };
+
+        // Firebase 初期化
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Firestoreからボスデータを取得して表示
+        async function loadBosses() {
+            const querySnapshot = await getDocs(collection(db, "bosses"));
+            const table = document.getElementById("bossTable").getElementsByTagName('tbody')[0];
+            table.innerHTML = ""; // 既存データをクリア
+
+            const bosses = [];
+
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                const spawnTime = calculateSpawnTime(data.remainingTime);  // 湧く時間を計算
+
+                bosses.push({
+                    id: docSnap.id,
+                    bossName: data.bossName,
+                    remainingTime: data.remainingTime,
+                    spawnTime: spawnTime
+                });
+            });
+
+            // 湧く時間でソート
+            bosses.sort((a, b) => a.spawnTime - b.spawnTime);
+
+            // ソートされたデータを表示
+            bosses.forEach(boss => {
+                const newRow = table.insertRow();
+                newRow.innerHTML = `
+                    <td>${boss.bossName}</td>
+                    <td><input type="text" value="${boss.remainingTime}" oninput="updateSpawnTime(this, '${boss.id}')"></td>
+                    <td class="spawnTime">${formatTime(boss.spawnTime)}</td>
+                    <td><button onclick="removeBoss('${boss.id}', this)">削除</button></td>
+                `;
+                updateSpawnTime(newRow.cells[1].children[0], boss.id);
+            });
+        }
+
+        // ボス追加
+        async function addBoss() {
+            const bossName = document.getElementById("bossName").value;
+            const remainingTime = document.getElementById("remainingTime").value;
+
+            if (!bossName || !remainingTime) {
+                alert("ボス名と残り時間を入力してください");
+                return;
+            }
+
+            await addDoc(collection(db, "bosses"), { bossName, remainingTime });
+            document.getElementById("bossName").value = "";
+            document.getElementById("remainingTime").value = "";
+            loadBosses(); // リロード
+        }
+
+        // ボス削除
+        async function removeBoss(id, button) {
+            await deleteDoc(doc(db, "bosses", id));
+            button.parentElement.parentElement.remove(); // 行を削除
+        }
+
+        // 残り時間から湧き時間を計算しFirestoreに保存
+        async function updateSpawnTime(input, id) {
+            const remainingTime = input.value;
+            if (!remainingTime.match(/^\d{4}$/)) return;
+
+            // 例: 0830 → 8時間30分後
+            const hours = parseInt(remainingTime.substring(0, 2));
+            const minutes = parseInt(remainingTime.substring(2, 4));
+            const now = new Date();
+            now.setHours(now.getHours() + hours);
+            now.setMinutes(now.getMinutes() + minutes);
+
+            const formattedTime = now.toLocaleTimeString("ja-JP", { hour: '2-digit', minute: '2-digit' });
+            input.parentElement.nextElementSibling.innerText = formattedTime;
+
+            // Firestore に更新
+            await updateDoc(doc(db, "bosses", id), { remainingTime });
+        }
+
+        // 湧く時間を計算
+        function calculateSpawnTime(remainingTime) {
+            const hours = parseInt(remainingTime.substring(0, 2));
+            const minutes = parseInt(remainingTime.substring(2, 4));
+            const now = new Date();
+            now.setHours(now.getHours() + hours);
+            now.setMinutes(now.getMinutes() + minutes);
+            return now.getTime();  // タイムスタンプに変換
+        }
+
+        // 時間をフォーマットする
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleTimeString("ja-JP", { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // 初回データ読み込み
+        window.onload = loadBosses;
+        window.addBoss = addBoss;
+        window.removeBoss = removeBoss;
+        window.updateSpawnTime = updateSpawnTime;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>ボス湧きタイマー</h1>
+        <div class="add-boss">
+            <input type="text" id="bossName" placeholder="ボス名">
+            <input type="text" id="remainingTime" placeholder="残り時間 (例: 0830)">
+            <button onclick="addBoss()">追加</button>
+        </div>
+        <table id="bossTable">
+            <thead>
+                <tr>
+                    <th>ボス名</th>
+                    <th>残り時間</th>
+                    <th>湧く時間</th>
+                    <th>削除</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</body>
+</html>
