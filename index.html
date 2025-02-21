@@ -17,11 +17,25 @@
         button {
             padding: 5px 10px;
             cursor: pointer;
+            margin: 5px;
+        }
+        input {
+            padding: 5px;
+            margin: 5px;
         }
     </style>
 </head>
 <body>
     <h1>ボスの湧く時間管理</h1>
+
+    <!-- ボスの名前と残り時間を入力するエリア -->
+    <div>
+        <label for="bossName">ボス名: </label>
+        <input type="text" id="bossName" placeholder="ボス名を入力" />
+        <label for="remainingTime">残り時間: </label>
+        <input type="text" id="remainingTime" placeholder="例: 0123" />
+        <button onclick="addBoss()">ボスを追加</button>
+    </div>
 
     <!-- ソートボタン -->
     <button onclick="sortById()">IDでソート</button>
