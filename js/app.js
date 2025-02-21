@@ -3,8 +3,10 @@ import { displayBosses, sortById, sortBySpawnTime } from './table.js';
 
 // ページ読み込み時にバージョン（更新日時）を表示
 window.onload = () => {
-    const buildTimestamp = BUILD_TIMESTAMP || 'No timestamp found';
-    document.getElementById("version").textContent = `Last updated: ${buildTimestamp}`;
+    const timestampElement = document.getElementById("timestamp");
+    if (window.BUILD_TIMESTAMP) {
+        timestampElement.textContent = window.BUILD_TIMESTAMP; // テンプレート変数を表示
+    }
 };
 
 // バージョン表示用関数（日時を取得）
