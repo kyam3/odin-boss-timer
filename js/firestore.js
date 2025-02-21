@@ -1,3 +1,5 @@
+// Firebaseのモジュールをインポート
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"; // 追加
 import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 // Firebaseの設定
