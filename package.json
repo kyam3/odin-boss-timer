@@ -2,7 +2,7 @@
   "name": "odin-boss-timer",
   "version": "1.0.0",
   "scripts": {
-    "build": "cp index.html build/index.html"
+    "build": "cp index.html build/index.html && cp -r css build/ && cp -r js build/"
   },
   "dependencies": {},
   "devDependencies": {}
