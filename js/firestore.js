@@ -1,5 +1,5 @@
 // Firebaseのモジュールをインポート
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"; // 追加
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 // Firebaseの設定
@@ -50,7 +50,7 @@ export const fetchBosses = async (callback) => {
 };
 
 // ボスを削除する関数
-export const deleteBoss = async (id, callback) => {
+export const deleteBossFromFirestore = async (id, callback) => {
     const bossDoc = doc(db, "bosses", id);
     await deleteDoc(bossDoc);
     console.log(`Document with ID ${id} deleted`);
