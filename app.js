@@ -1,5 +1,5 @@
 // Firebaseの設定
-  const firebaseConfig = {
+const firebaseConfig = {
     apiKey: "AIzaSyAk0LNlawSWUm--9l_Wf9-4qVfxGiyq-Dw",
     authDomain: "odin-boss-timer.firebaseapp.com",
     projectId: "odin-boss-timer",
@@ -7,7 +7,7 @@
     messagingSenderId: "29849058878",
     appId: "1:29849058878:web:06c4e1ff0f3988c11f1b6f",
     measurementId: "G-NCLC5GRC2D"
-  };
+};
 
 // Firebaseを初期化
 const app = firebase.initializeApp(firebaseConfig);
@@ -15,6 +15,21 @@ const db = firebase.firestore(app);
 
 // ボスデータを格納する配列
 let bosses = [];
+
+// バージョン表示用関数（日時を取得）
+const getVersion = () => {
+    const now = new Date();
+    const version = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ` + 
+                    `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}` + 
+                    `.${now.getMilliseconds().toString().padStart(3, '0')}`;
+    return version;
+};
+
+// ページ読み込み時にバージョンを表示
+window.onload = () => {
+    document.getElementById("version").textContent = getVersion(); // 日時バージョンを表示
+    fetchBosses(); // ボスデータを取得
+};
 
 // ボスデータをFirestoreに追加する関数
 const addBossToFirestore = async (name, remainingTime) => {
@@ -95,6 +110,3 @@ const addBoss = () => {
         alert("ボス名と残り時間を入力してください！");
     }
 };
-
-// ページ読み込み時にデータを取得
-window.onload = fetchBosses;
