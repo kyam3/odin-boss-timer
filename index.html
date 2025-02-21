@@ -5,12 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>timer1</title>
     <link rel="stylesheet" href="css/style.css">
+    <script>
+        // BUILD_TIMESTAMPをJavaScriptで利用できるようにする
+        window.BUILD_TIMESTAMP = "{{BUILD_TIMESTAMP}}";
+    </script>
 </head>
 <body>
     <h1>TIMER</h1>
     
     <!-- 更新日時表示 -->
-    <div id="version">Last updated: {{BUILD_TIMESTAMP}}</div>
+    <div id="version">Last updated: <span id="timestamp"></span></div>
 
     <div class="input-container">
         <label for="bossName">ボス名: </label>
@@ -41,5 +45,15 @@
     <script type="module" src="js/firestore.js"></script>
     <script type="module" src="js/table.js"></script>
     <script type="module" src="js/app.js"></script>
+
+    <script>
+        // BUILD_TIMESTAMPを表示する処理
+        window.onload = () => {
+            const timestampElement = document.getElementById("timestamp");
+            if (window.BUILD_TIMESTAMP) {
+                timestampElement.textContent = window.BUILD_TIMESTAMP;
+            }
+        };
+    </script>
 </body>
 </html>
