@@ -116,7 +116,7 @@ const sortBySpawnTime = () => {
 };
 
 // ボスを追加する関数
-const addBoss = () => {
+export const addBoss = () => {
     const bossName = document.getElementById('bossName').value;
     const remainingTime = document.getElementById('remainingTime').value;
     if (bossName && remainingTime) {
@@ -127,3 +127,6 @@ const addBoss = () => {
         alert("ボス名と残り時間を入力してください！");
     }
 };
+
+// ボタンイベントリスナーを設定
+document.getElementById('addBossBtn').addEventListener('click', addBoss);
