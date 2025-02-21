@@ -1,3 +1,5 @@
+import { deleteBossFromFirestore } from './firestore.js'; // firestore.jsから削除用の関数をインポート
+
 // ボスデータをテーブルに表示する関数
 export const displayBosses = (bosses) => {
     const tableBody = document.querySelector('#bossTable tbody');
@@ -21,6 +23,22 @@ export const displayBosses = (bosses) => {
 
         tableBody.appendChild(row);
     });
+};
+
+// ボス削除関数
+export const deleteBoss = (bossId, callback) => {
+    // Firestoreからボスデータを削除
+    deleteBossFromFirestore(bossId)
+        .then(() => {
+            // 削除後、テーブルを再表示
+            alert('ボスが削除されました！');
+            // 必要であればデータを再取得して表示を更新
+            callback();
+        })
+        .catch((error) => {
+            console.error('ボスの削除に失敗しました: ', error);
+            alert('削除に失敗しました。');
+        });
 };
 
 // IDでソート
