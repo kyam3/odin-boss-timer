@@ -1,6 +1,5 @@
-// Firebase SDKのインポート
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
-import { getFirestore, collection, addDoc, getDocs } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js';
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 // Firebaseの設定
 const firebaseConfig = {
@@ -71,6 +70,7 @@ const displayBosses = () => {
             <td>${boss.name}</td>
             <td>${boss.remainingTime}</td>
             <td>${boss.spawnTime}</td>
+            <td><button class="delete-btn" onclick="deleteBoss('${boss.id}')">削除</button></td> <!-- 削除ボタン -->
         `;
         tableBody.appendChild(row);
     });
@@ -84,6 +84,14 @@ const fetchBosses = async () => {
         bosses.push({ id: doc.id, ...doc.data() });
     });
     displayBosses();
+};
+
+// ボスを削除する関数
+const deleteBoss = async (id) => {
+    const bossDoc = doc(db, "bosses", id);
+    await deleteDoc(bossDoc);
+    console.log(`Document with ID ${id} deleted`);
+    fetchBosses(); // 再度データを取得
 };
 
 // IDでソート
