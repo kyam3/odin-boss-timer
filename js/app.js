@@ -1,11 +1,18 @@
 import { addBossToFirestore, fetchBosses, deleteBoss } from './firestore.js';
 import { displayBosses, sortById, sortBySpawnTime } from './table.js';
 
-// ページ読み込み時にバージョンを表示
+// ページ読み込み時にバージョン（更新日時）を表示
 window.onload = () => {
-    document.getElementById("version").textContent = getVersion(); // 日時バージョンを表示
-    fetchBosses(displayBosses); // ボスデータを取得して表示
-};
+    // ファイルの更新日時を取得
+    const fileUrl = 'index.html'; // 更新日時を取得したいファイル
+    fetch(fileUrl, { method: 'HEAD' })
+        .then(response => {
+            const lastModified = response.headers.get('Last-Modified');
+            document.getElementById('version').textContent = `Last updated: ${lastModified}`;
+        })
+        .catch(error => {
+            console.error('Error fetching last modified:', error);
+        });
 
 // バージョン表示用関数（日時を取得）
 const getVersion = () => {
