@@ -1,12 +1,11 @@
 // Firebaseの設定
 const firebaseConfig = {
-    apiKey: "AIzaSyAk0LNlawSWUm--9l_Wf9-4qVfxGiyq-Dw",
-    authDomain: "odin-boss-timer.firebaseapp.com",
-    projectId: "odin-boss-timer",
-    storageBucket: "odin-boss-timer.firebasestorage.app",
-    messagingSenderId: "29849058878",
-    appId: "1:29849058878:web:06c4e1ff0f3988c11f1b6f",
-    measurementId: "G-NCLC5GRC2D"
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
 };
 
 const app = firebase.initializeApp(firebaseConfig);
@@ -15,17 +14,29 @@ const db = firebase.firestore(app);
 // ボスデータを格納する配列
 let bosses = [];
 
-// 初期データの取得
-const fetchBosses = async () => {
-    const querySnapshot = await getDocs(collection(db, "bosses"));
-    bosses = [];
-    querySnapshot.forEach((doc) => {
-        bosses.push({ id: doc.id, ...doc.data() });
+// ボスデータをFirestoreに追加する関数
+const addBossToFirestore = async (name, remainingTime) => {
+    const spawnTime = calculateSpawnTime(remainingTime);
+    const docRef = await addDoc(collection(db, "bosses"), {
+        name: name,
+        remainingTime: remainingTime,
+        spawnTime: spawnTime
     });
-    displayBosses();
+    console.log("Document written with ID: ", docRef.id);
+    fetchBosses(); // 再度データを取得
 };
 
-// データの表示
+// 湧く時間を計算する関数
+const calculateSpawnTime = (remainingTime) => {
+    const currentTime = new Date();
+    const hours = parseInt(remainingTime.substring(0, 2), 10);
+    const minutes = parseInt(remainingTime.substring(2, 4), 10);
+    currentTime.setHours(currentTime.getHours() + hours);
+    currentTime.setMinutes(currentTime.getMinutes() + minutes);
+    return currentTime.toLocaleTimeString();
+};
+
+// ボスデータをテーブルに表示する関数
 const displayBosses = () => {
     const tableBody = document.querySelector('#bossTable tbody');
     tableBody.innerHTML = ''; // 既存のデータをクリア
@@ -44,6 +55,16 @@ const displayBosses = () => {
     });
 };
 
+// Firestoreからボスデータを取得する関数
+const fetchBosses = async () => {
+    const querySnapshot = await getDocs(collection(db, "bosses"));
+    bosses = [];
+    querySnapshot.forEach((doc) => {
+        bosses.push({ id: doc.id, ...doc.data() });
+    });
+    displayBosses();
+};
+
 // IDでソート
 const sortById = () => {
     bosses.sort((a, b) => a.id.localeCompare(b.id)); // IDを文字列としてソート
@@ -58,6 +79,19 @@ const sortBySpawnTime = () => {
         return timeA - timeB; // 時間順でソート
     });
     displayBosses(); // ソート後に再表示
+};
+
+// ボスを追加する関数
+const addBoss = () => {
+    const bossName = document.getElementById('bossName').value;
+    const remainingTime = document.getElementById('remainingTime').value;
+    if (bossName && remainingTime) {
+        addBossToFirestore(bossName, remainingTime);
+        document.getElementById('bossName').value = ''; // 入力フィールドをクリア
+        document.getElementById('remainingTime').value = ''; // 入力フィールドをクリア
+    } else {
+        alert("ボス名と残り時間を入力してください！");
+    }
 };
 
 // ページ読み込み時にデータを取得
