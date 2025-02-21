@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>timer</title>
-    <link rel="stylesheet" href="style.css"> <!-- CSSファイルを読み込む -->
+    <title>ボスの湧く時間管理</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <h1>ボスの湧く時間管理</h1>
@@ -14,10 +14,9 @@
         <input type="text" id="bossName" placeholder="ボス名を入力" />
         <label for="remainingTime">残り時間: </label>
         <input type="text" id="remainingTime" placeholder="例: 0123" />
-        <button id="addBossBtn">ボスを追加</button> <!-- 変更点：IDを追加 -->
+        <button id="addBossBtn">ボスを追加</button>
     </div>
 
-    <!-- ソートボタン -->
     <button onclick="sortById()">IDでソート</button>
     <button onclick="sortBySpawnTime()">湧く時間でソート</button>
 
@@ -28,30 +27,17 @@
                 <th>ボス名</th>
                 <th>残り時間</th>
                 <th>湧く時間</th>
-                <th>削除</th> <!-- 削除ボタンの列 -->
+                <th>削除</th>
             </tr>
         </thead>
-        <tbody>
-            <!-- ボスデータがここに追加される -->
-        </tbody>
+        <tbody></tbody>
     </table>
 
-    <!-- Firebaseのスクリプトに type="module" を追加 -->
     <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-
-    <!-- app.js も type="module" を追加 -->
-    <script type="module" src="app.js"></script> <!-- JavaScriptファイルを正しく配置 -->
-
-    <script type="module">
-        // app.js で定義されたaddBoss関数をボタンに紐づける
-        document.getElementById('addBossBtn').addEventListener('click', function() {
-            addBoss(); // こちらでaddBossを呼び出す
-        });
-    </script>
+    <!-- Firestoreとテーブルの操作を分割したJavaScriptファイル -->
+    <script type="module" src="js/firestore.js"></script>
+    <script type="module" src="js/table.js"></script>
+    <script type="module" src="js/app.js"></script>
 </body>
-<!-- フッターでバージョンを表示 -->
-<footer style="text-align: center; margin-top: 20px;">
-    <p>Version: <span id="version">Loading...</span></p>
-</footer>
 </html>
