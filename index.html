@@ -5,31 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ボスの湧く時間管理</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .input-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .input-container input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .input-container button {
+            padding: 8px 15px;
+            margin: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .input-container button:hover {
+            background-color: #45a049;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
+
         th, td {
-            padding: 8px;
+            padding: 10px;
             text-align: center;
             border: 1px solid #ddd;
         }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
         button {
             padding: 5px 10px;
             cursor: pointer;
-            margin: 5px;
+            margin: 10px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            border-radius: 4px;
         }
-        input {
-            padding: 5px;
-            margin: 5px;
+
+        button:hover {
+            background-color: #007B9A;
         }
     </style>
 </head>
 <body>
     <h1>ボスの湧く時間管理</h1>
 
-    <!-- ボスの名前と残り時間を入力するエリア -->
-    <div>
+    <div class="input-container">
         <label for="bossName">ボス名: </label>
         <input type="text" id="bossName" placeholder="ボス名を入力" />
         <label for="remainingTime">残り時間: </label>
