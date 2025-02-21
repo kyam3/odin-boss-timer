@@ -1,0 +1,6 @@
+[build]
+  command = "npm run build"
+  publish = "build"
+
+[build.environment]
+  BUILD_TIMESTAMP = "${process.env.DEPLOY_TIME || new Date().toISOString()}"
