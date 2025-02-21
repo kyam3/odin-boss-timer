@@ -8,6 +8,9 @@
 </head>
 <body>
     <h1>ボスの湧く時間管理</h1>
+    
+    <!-- 更新日時表示 -->
+    <p id="version">Loading version...</p> <!-- 更新日時が表示される -->
 
     <div class="input-container">
         <label for="bossName">ボス名: </label>
@@ -32,14 +35,9 @@
         </thead>
         <tbody></tbody>
     </table>
-    
-    <footer style="text-align: center; margin-top: 20px;">
-        <p>Version: <span id="version">Loading...</span></p>
-    </footer>
 
     <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-    <!-- Firestoreとテーブルの操作を分割したJavaScriptファイル -->
     <script type="module" src="js/firestore.js"></script>
     <script type="module" src="js/table.js"></script>
     <script type="module" src="js/app.js"></script>
