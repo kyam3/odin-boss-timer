@@ -13,7 +13,7 @@ window.onload = () => {
         .catch(error => {
             console.error('Error fetching last modified:', error);
         });
-}
+};
 
 // バージョン表示用関数（日時を取得）
 const getVersion = () => {
