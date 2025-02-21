@@ -100,7 +100,7 @@
         <input type="text" id="bossName" placeholder="ボス名を入力" />
         <label for="remainingTime">残り時間: </label>
         <input type="text" id="remainingTime" placeholder="例: 0123" />
-        <button onclick="addBoss()">ボスを追加</button>
+        <button id="addBossBtn">ボスを追加</button> <!-- 変更点：IDを追加 -->
     </div>
 
     <!-- ソートボタン -->
@@ -128,6 +128,11 @@
 
     <!-- app.js も type="module" を追加 -->
     <script type="module" src="app.js"></script> <!-- JavaScriptファイルを正しく配置 -->
+    
+    <script type="module">
+        // app.js で定義されたaddBoss関数をボタンに紐づける
+        document.getElementById('addBossBtn').addEventListener('click', addBoss);
+    </script>
 </body>
 <!-- フッターでバージョンを表示 -->
 <footer style="text-align: center; margin-top: 20px;">
